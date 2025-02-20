@@ -1,0 +1,141 @@
+{%extends "base.html"%}
+{%block head%}
+<link rel="stylesheet" href="/static/css/style.css">
+{%endblock%}
+
+{%block container%}
+<div class="movies">
+
+    {% for movie in popular_movies[:5] %}
+
+    <div class="movie">
+        <img src="https://image.tmdb.org/t/p/original{{movie.poster_path}}" alt="">
+        <h3>{{movie.title}}</h3>
+        <p>{{movie.release_date}}</p>
+        <div class="movie-description">
+            <div class="movie-description-rating">
+                <img src="/static/images/image 3.png" alt="">
+                <strong>{{movie.vote_average}}</strong>
+            </div>
+            <div class="movie-description-like">
+                {% if current_user.is_authenticated %}
+                    {% if movie.id in favorite_movies %}
+                    <img class="movie-like" src="/static/images/image 5.png" data-movie-id="{{movie.id}}" alt="">   
+                    {% else %}
+                    <img class="movie-like" src="/static/images/image 4.png" data-movie-id="{{movie.id}}" alt="">    
+                    {% endif %}
+                {% else %}
+                <a href="/login"><img  src="/static/images/image 4.png" alt=""></a>    
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
+
+    {%endfor%}
+</div>
+
+
+<div class="movies-header">
+    <h2>Top rated movies:</h2>
+    <a href="{{ url_for('core.top_rated_movies' ) }}" class="movies-header-link">All</a>
+</div>
+<div class="movies">
+
+    {% for movie in toprated_movies[:5] %}
+
+    <div class="movie">
+        <img src="https://image.tmdb.org/t/p/original{{movie.poster_path}}" alt="">
+        <h3>{{movie.title}}</h3>
+        <p>{{movie.release_date}}</p>
+        <div class="movie-description">
+            <div class="movie-description-rating">
+                <img src="/static/images/image 3.png" alt="">
+                <strong>{{movie.vote_average}}</strong>
+            </div>
+            <div class="movie-description-like">
+                {% if current_user.is_authenticated %}
+                    {% if movie.id in favorite_movies %}
+                        <img class="movie-like" src="/static/images/image 5.png" data-movie-id="{{movie.id}}" alt="">
+                {% else %}
+                        <img class="movie-like" src="/static/images/image 4.png" data-movie-id="{{movie.id}}" alt="">
+                {% endif %}
+                    {% else %}
+                        <a href="/login"><img src="/static/images/image 4.png" alt=""></a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+
+    {% endfor %}
+</div>
+
+<div class="movies-header">
+    <h2>Popular movies:</h2>
+    <a href="{{ url_for('core.popular_movies' ) }}" class="movies-header-link">All</a>
+</div>
+<div class="movies">
+
+    {% for movie in popular_movies[:5] %}
+
+    <div class="movie">
+        <img src="https://image.tmdb.org/t/p/original{{movie.poster_path}}" alt="">
+        <h3>{{movie.title}}</h3>
+        <p>{{movie.release_date}}</p>
+        <div class="movie-description">
+            <div class="movie-description-rating">
+                <img src="/static/images/image 3.png" alt="">
+                <strong>{{movie.vote_average}}</strong>
+            </div>
+            <div class="movie-description-like">
+                {% if current_user.is_authenticated %}
+                {% if movie.id in favorite_movies %}
+                    <img class="movie-like" src="/static/images/image 5.png" data-movie-id="{{movie.id}}" alt="">
+            {% else %}
+                    <img class="movie-like" src="/static/images/image 4.png" data-movie-id="{{movie.id}}" alt="">
+            {% endif %}
+                {% else %}
+                    <a href="/login"><img src="/static/images/image 4.png" alt=""></a>
+            {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+
+    {% endfor %}
+</div>
+<footer>
+    <div class=footer>
+        <h3>x1ter</h3>
+    </div>
+</footer>
+
+<script>
+    let buttons = document.querySelectorAll(".movie-like")
+    buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            console.log('click')
+            let movie_id = btn.dataset.movieId
+            console.log(movie_id)
+            let url = `http://127.0.0.1:5000/movies/favorite/${movie_id}`
+            fetch(url)
+                .then((res) => {
+                    return res.text()
+                })
+                .then((text) => {
+                    console.log(text)
+                    if (text.includes('saved')) {
+                        btn.src = "/static/images/image 5.png"
+                    } else {
+                        btn.src = "/static/images/image 4.png"
+
+                    }
+
+                })
+        })
+    })
+</script>
+{%endblock%}

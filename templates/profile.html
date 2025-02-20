@@ -1,0 +1,52 @@
+{%extends "base.html"%}
+{%block head%}
+<link rel="stylesheet" href="/static/css/style.css">
+{%endblock%}
+{%block container%}
+
+<div class="movies">
+
+    {% for movie in favorite_movies%}
+        {%if movie.id%}
+
+    <div class="movie">
+        <img src="https://image.tmdb.org/t/p/original{{movie.poster_path}}" alt="">
+
+        <a href="{{ url_for('core.movie_detalis', movie_id=movie.id ) }}">{{movie.title}}</a>
+            <p>{{movie.release_date}}</p>
+            <div class="movie-description">
+                <div class="movie-description-rating">
+                    <img src="/static/images/image 3.png" alt="">
+                    <strong>{{movie.vote_average}}</strong>
+                </div>
+                <div class="movie-description-like">
+                   
+                        <img class="movie-like" src="/static/images/image 5.png" data-movie-id="{{movie.id}}" alt="">
+                    
+            </div>
+        </div>
+    </div>
+{% endif %}
+    {% endfor %}
+</div>
+<script>
+    let buttons = document.querySelectorAll(".movie-like")
+    buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            console.log('click')
+            let movie_id = btn.dataset.movieId
+            console.log(movie_id)
+            let url = `http://127.0.0.1:5000/movies/favorite/${movie_id}`
+            fetch(url)
+                .then((res) => {
+                    if (res.ok){
+                       const movie=btn.parentElement.parentElement.parentElement;
+                       movie.remove()
+                }
+         })
+                   
+        })
+    })
+</script>
+
+ {%endblock%}

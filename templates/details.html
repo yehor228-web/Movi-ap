@@ -1,0 +1,196 @@
+{%extends "base.html"%}
+{%block head%}
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/details.css">
+<link rel="stylesheet" href="/static/css/nullable.css">
+{%endblock%}
+{%block container%}
+
+
+
+
+
+<div class="movie-header" class="movies-header-link"
+    style="background-image: url('https://image.tmdb.org/t/p/original{{movie.backdrop_path}}');">
+    <img src="https://image.tmdb.org/t/p/original{{movie.poster_path}}" alt="">
+    <div class="movie-header-details">
+        <h1>{{movie.title}}</h1>
+
+        <div class="movie-header-text">
+            <p>{{movie.release_date}}</p>
+
+            <div class="movie-description-rating">
+                <img src="/static/images/image 3.png" alt="">
+                <strong>{{movie.vote_average}}</strong>
+            </div>
+        </div>
+
+        <p class="movie-overview">{{movie.overview}}</p>
+
+    </div>
+</div>
+<div class="movie-images">
+    <div class="carousel-wrapper">
+        {% for i in range(1,11) %}
+        <input id="slide{{i}}" type="radio" name="controls" {% if i==1 %} checked="checked" {% endif %} />
+        {% endfor %}
+
+        {% for i in range(1,11) %}
+        <label for="slide{{i}}" class="nav-dot"></label>
+        {% endfor %}
+
+        {% for i in range(1,11) %}
+        <label for="slide{{i}}" class="left-arrow"> </label>
+        {% endfor %}
+
+        {% for i in range(1,11) %}
+        <label for="slide{{i}}" class="right-arrow"> > </label>
+        {% endfor %}
+
+
+
+        <label for="slide1" class="right-arrow"> > </label>
+
+
+        <div class="carousel">
+            <ul>
+                {% for i in range(1,11) %}
+                <li>
+                    <img src="https://image.tmdb.org/t/p/original{{images.backdrops[i].file_path}}" />
+                </li>
+                {% endfor %}
+            </ul>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="movies-video">
+    <iframe width="1580" height="515" src="https://www.youtube.com/embed/{{video_key}}">
+    </iframe>
+</div>
+
+<div class="movies">
+
+    {% for movie in recommendations[:5] %}
+
+    <div class="movie">
+        <img src="https://image.tmdb.org/t/p/original{{movie.poster_path}}" alt="">
+        <h3>{{movie.title}}</h1>
+            <p>{{movie.release_date}}</p>
+            <div class="movie-description">
+                <div class="movie-description-rating">
+                    <img src="/static/images/image 3.png" alt="">
+                    <strong>{{movie.vote_average}}</strong>
+                </div>
+                <div class="movie-description-like">
+                    {% if current_user.is_authenticated %}
+                    {% if movie.id in favorite_movies %}
+                    <img class="movie-like" src="/static/images/image 5.png" data-movie-id="{{movie.id}}" alt="">
+                    {% else %}
+                    <img class="movie-like" src="/static/images/image 4.png" data-movie-id="{{movie.id}}" alt="">
+                    {% endif %}
+                    {% else %}
+                    <a href="/login"><img src="/static/images/image 4.png" alt=""></a>
+                    {% endif %}
+
+                </div>
+            </div>
+    </div>
+
+
+    {% endfor %}
+</div>
+
+<div class=comments>
+    <h3>Commets</h3>
+    <form class="comment_form" autocomplete="off" method="post">
+        <textarea name="content" type="text" placeholder="Write you comment:"></textarea>
+        {% if current_user.is_authenticated %}
+
+        <button type="submit" class="comment_btn">Send</button>
+        {% else %}
+        <a href="{{ url_for('users.login' ) }}" class="comment_btn">Send</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="comments-list">
+
+
+    {% for comment in comments %}
+    <div class="comment-details" id='comment-{{comment.id}}'>
+        <div class="comment-details-header">
+
+            <h3>{{comment.user.username}}</h3>
+            <div class="comment-details-header-right">
+                <p>{{comment.created_at.strftime('%Y-%m-%d')}}</p>
+                {% if current_user.is_authenticated %}
+                {% if current_user == comment.user %}
+                <svg class="comment-delete-btn" data-comment-id="{{comment.id}}" fill="#ff0000" height="30px"
+                    width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 330 330" xml:space="preserve"
+                    stroke="#ff0000">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <g id="XMLID_6_">
+                            <g id="XMLID_11_">
+                                <path
+                                    d="M240,121.076H30V275c0,8.284,6.716,15,15,15h60h37.596c19.246,24.348,49.031,40,82.404,40c57.897,0,105-47.103,105-105 C330,172.195,290.816,128.377,240,121.076z M225,300c-41.355,0-75-33.645-75-75s33.645-75,75-75s75,33.645,75,75 S266.355,300,225,300z">
+                                </path>
+                            </g>
+                            <g id="XMLID_18_">
+                                <path
+                                    d="M240,90h15c8.284,0,15-6.716,15-15s-6.716-15-15-15h-30h-15V15c0-8.284-6.716-15-15-15H75c-8.284,0-15,6.716-15,15v45H45 H15C6.716,60,0,66.716,0,75s6.716,15,15,15h15H240z M90,30h90v30h-15h-60H90V30z">
+                                </path>
+                            </g>
+                            <g id="XMLID_23_">
+                                <path
+                                    d="M256.819,193.181c-5.857-5.858-15.355-5.858-21.213,0L225,203.787l-10.606-10.606c-5.857-5.858-15.355-5.858-21.213,0 c-5.858,5.858-5.858,15.355,0,21.213L203.787,225l-10.606,10.606c-5.858,5.858-5.858,15.355,0,21.213 c2.929,2.929,6.768,4.394,10.606,4.394c3.839,0,7.678-1.465,10.607-4.394L225,246.213l10.606,10.606 c2.929,2.929,6.768,4.394,10.607,4.394c3.839,0,7.678-1.465,10.606-4.394c5.858-5.858,5.858-15.355,0-21.213L246.213,225 l10.606-10.606C262.678,208.535,262.678,199.039,256.819,193.181z">
+                                </path>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+
+        <p>{{comment.content}}</p>
+    </div>
+
+    {% endfor %}
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".comment-delete-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                const commentId = this.getAttribute("data-comment-id");
+                const commentElement = document.getElementById("comment-" + commentId);
+                if (confirm("Ви впевнені, що хочете видалити цей коментар?")) {
+                    fetch(`http://127.0.0.1:5000/comment/${commentId}/delete`, {
+                        method: "POST"
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status == "success") {
+                                commentElement.remove();
+                            } else {
+                                alert(data.message);
+                            }
+                        })
+                        .catch(error => console.error("Помилка:", error));
+                }
+            });
+        });
+    });
+
+</script>
+{%endblock%}
