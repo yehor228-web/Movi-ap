@@ -46,8 +46,8 @@ def register():
             flash  ('User already exists', "error"  )
             error=True
         
-        if  len (password)<8:
-            flash  ('password should contains minimum 8 characters',"error"   )
+        if  len (password)<4:
+            flash  ('password should contains minimum 4 characters',"error"   )
             error=True
         if not error:
             
