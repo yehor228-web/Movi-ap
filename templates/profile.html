@@ -36,7 +36,7 @@
             console.log('click')
             let movie_id = btn.dataset.movieId
             console.log(movie_id)
-            let url = `http://127.0.0.1:5000/movies/favorite/${movie_id}`
+            let url = `https://movi-app-ihba.onrender.com/home${movie_id}`
             fetch(url)
                 .then((res) => {
                     if (res.ok){
