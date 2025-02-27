@@ -2,40 +2,7 @@
 {%block head%}
 <link rel="stylesheet" href="/static/css/style.css">
 {%endblock%}
-
-{%block container%}
-<div class="movies">
-
-    {% for movie in popular_movies[:5] %}
-
-    <div class="movie">
-        <img src="https://image.tmdb.org/t/p/original{{movie.poster_path}}" alt="">
-        <h3>{{movie.title}}</h3>
-        <p>{{movie.release_date}}</p>
-        <div class="movie-description">
-            <div class="movie-description-rating">
-                <img src="/static/images/image 3.png" alt="">
-                <strong>{{movie.vote_average}}</strong>
-            </div>
-            <div class="movie-description-like">
-                {% if current_user.is_authenticated %}
-                    {% if movie.id in favorite_movies %}
-                    <img class="movie-like" src="/static/images/image 5.png" data-movie-id="{{movie.id}}" alt="">   
-                    {% else %}
-                    <img class="movie-like" src="/static/images/image 4.png" data-movie-id="{{movie.id}}" alt="">    
-                    {% endif %}
-                {% else %}
-                <a href="/login"><img  src="/static/images/image 4.png" alt=""></a>    
-                {% endif %}
-                
-            </div>
-        </div>
-    </div>
-
-    {%endfor%}
-</div>
-
-
+{%block container%}    
 <div class="movies-header">
     <h2>Top rated movies:</h2>
     <a href="{{ url_for('core.top_rated_movies' ) }}" class="movies-header-link">All</a>
@@ -107,11 +74,6 @@
 
     {% endfor %}
 </div>
-<footer>
-    <div class=footer>
-        <h3>x1ter</h3>
-    </div>
-</footer>
 
 <script>
     let buttons = document.querySelectorAll(".movie-like")

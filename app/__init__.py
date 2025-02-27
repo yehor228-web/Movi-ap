@@ -1,10 +1,14 @@
 def create_app():
 
     from flask import Flask 
+    import os
 
-    app = Flask(__name__,static_url_path='/static',template_folder="../templates",static_folder="../static")
-    app.config["SECRET_KEY"] = "key-password"
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+    app = Flask(__name__,static_url_path='/static',
+                template_folder="../templates",
+                static_folder="../static")
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI")
+   
 
     from app.extensions import db,login_manager    
     from users.models import User,FavoriteMovies,Comment

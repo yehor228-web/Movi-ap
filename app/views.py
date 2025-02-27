@@ -53,14 +53,26 @@ def movie_detalis(movie_id):
     from flask_login import current_user
     from .extensions import db
     movie=get_movies_details(movie_id) 
+    fetched_videos=get_movies_videos(movie_id)
     images=get_movies_images(movie_id)
     
     recommendations=get_movies_recommendations(movie_id) 
 
     videos=get_movies_videos(movie_id)
     
-    videos=[item for item in videos if item.get('type')=="Trailer" and item.get('official')]
+    videos = [
+        item
+        for item in fetched_videos
+        if item.get("type") == "Trailer" and item.get("official")
+    ]
 
+    if len(videos) > 1:
+            video_key = videos[0]["key"]
+    elif len(fetched_videos) > 1:
+            video_key = fetched_videos[0]["key"]
+    else:
+            video_key = None
+            
     if request.method=="POST":
         content=request.form.get("content")
         if  not content:
@@ -73,7 +85,7 @@ def movie_detalis(movie_id):
 
     comments=Comment.query.filter_by(movie_id=movie_id).all()
     print(comments)
-    return render_template('details.html', movie=movie, images=images, recommendations=recommendations,video_key=videos[0]["key"],comments=comments)
+    return render_template('details.html', movie=movie, images=images, recommendations=recommendations,comments=comments,video_key=video_key)
 
 @core.route("/comment/<int:comment_id>/delete", methods=["POST"])
 @login_required
