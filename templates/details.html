@@ -176,7 +176,7 @@
                 const commentId = this.getAttribute("data-comment-id");
                 const commentElement = document.getElementById("comment-" + commentId);
                 if (confirm("Ви впевнені, що хочете видалити цей коментар?")) {
-                    fetch(`http://127.0.0.1:5000/comment/${commentId}/delete`, {
+                    fetch(`https://movi-app-ihba.onrender.com/comment/${commentId}/delete`, {
                         method: "POST"
                     })
                         .then(response => response.json())
